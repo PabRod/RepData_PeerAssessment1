@@ -87,7 +87,7 @@ numMissing <- sum(is.na(data$steps))
 numMissing
 ```
 
-Replace the nans with zeros:  
+Replace the nans with the means per interval across all days:  
 
 ```{r}
 filledIn <- data
@@ -95,6 +95,14 @@ filledIn <- merge(filledIn, dailySteps) # This appends the means per interval
 
 nans <- is.na(filledIn$steps) # Substitute the nans with means per interval
 filledIn[nans, 2] <- filledIn[nans, 4] 
+```
+
+Take a look at the filled data:  
+
+```{r}
+stepsPerDayFilled <- aggregate(filledIn$steps, by = list(filledIn$date), FUN = sum)
+colnames(stepsPerDayFilled) <- c("date", "steps")
+barplot(stepsPerDayFilled$steps, xlab = 'Day', ylab = 'Steps', main = 'Steps per day (filled missing values)', names.arg = stepsPerDayFilled$date)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?

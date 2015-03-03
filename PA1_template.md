@@ -132,7 +132,7 @@ numMissing
 ## [1] 2304
 ```
 
-Replace the nans with zeros:  
+Replace the nans with the means per interval across all days:  
 
 
 ```r
@@ -142,6 +142,17 @@ filledIn <- merge(filledIn, dailySteps) # This appends the means per interval
 nans <- is.na(filledIn$steps) # Substitute the nans with means per interval
 filledIn[nans, 2] <- filledIn[nans, 4] 
 ```
+
+Take a look at the filled data:  
+
+
+```r
+stepsPerDayFilled <- aggregate(filledIn$steps, by = list(filledIn$date), FUN = sum)
+colnames(stepsPerDayFilled) <- c("date", "steps")
+barplot(stepsPerDayFilled$steps, xlab = 'Day', ylab = 'Steps', main = 'Steps per day (filled missing values)', names.arg = stepsPerDayFilled$date)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -178,5 +189,5 @@ plot(weekdayMean$interval, weekdayMean$steps, type = 'l', xlab = "interval", yla
 plot(weekendMean$interval, weekendMean$steps, type = 'l', xlab = "interval", ylab = "frequency", main = "Weekend")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-15-1.png) 
 
